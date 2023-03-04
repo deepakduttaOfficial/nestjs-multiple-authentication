@@ -85,4 +85,29 @@ export class AppService {
       console.log(error);
     }
   }
+
+  // Sign in/up with Github
+  async WithGithub(user) {
+    try {
+      const isExisUser = await this.prisma.users.findUnique({
+        where: { githubId: user.profile.id } as Prisma.usersWhereUniqueInput,
+      });
+
+      if (isExisUser) {
+        return isExisUser;
+      } else {
+        const newUser = await this.prisma.users.create({
+          data: {
+            name: user.profile.displayName,
+            provider: user.profile.provider,
+            data: { jsonData: user },
+            githubId: user.profile.id,
+          },
+        });
+        return newUser;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }

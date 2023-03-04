@@ -9,6 +9,7 @@ import {
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
 import { FacebookAuthGuard } from './auth/facebookAuth/facebook-auth.guard';
+import { GhitbAuthGuard } from './auth/githubAuth/github-auth.guard';
 import { GoogleAuthGuard } from './auth/googleAuth/google-auth.guard';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { LocalAuthGuard } from './auth/local-auth.guard';
@@ -69,6 +70,21 @@ export class AppController {
     const userData = await this.appService.WithFacebook(user);
     console.log(userData);
 
+    const { data, ...rest } = userData;
+    const { access_token } = await this.authService.login(rest);
+    return { access_token, ...rest, data };
+  }
+
+  // Sign In/Up with Github-------------------------->
+  @UseGuards(GhitbAuthGuard)
+  @Get('github/auth')
+  SignInWithGithub() {}
+
+  @UseGuards(GhitbAuthGuard)
+  @Get('github/callback')
+  async SignInWithGithubCallback(@Request() req) {
+    const { user } = req;
+    const userData = await this.appService.WithGithub(user);
     const { data, ...rest } = userData;
     const { access_token } = await this.authService.login(rest);
     return { access_token, ...rest, data };

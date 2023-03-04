@@ -4,6 +4,7 @@ import { PassportModule } from '@nestjs/passport/dist';
 import { PrismaService } from 'src/prisma.service';
 import { AuthService } from './auth.service';
 import { FacebookStrategy } from './facebookAuth/facebook.strategy';
+import { GithubStrategy } from './githubAuth/github.strategy';
 import { GoogleStrategy } from './googleAuth/google.strategy';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
@@ -23,6 +24,7 @@ import { LocalStrategy } from './local.strategy';
     JwtStrategy,
     GoogleStrategy,
     FacebookStrategy,
+    GithubStrategy,
   ],
   exports: [AuthService],
 })
